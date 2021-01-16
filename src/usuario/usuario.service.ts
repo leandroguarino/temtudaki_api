@@ -3,6 +3,7 @@ import { ResultadoDto } from 'src/dto/resultado.dto';
 import { Repository } from 'typeorm';
 import { UsuarioCadastrarDto } from './dto/usuario.cadastrar.dto';
 import { Usuario } from './usuario.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuarioService {
@@ -19,7 +20,7 @@ export class UsuarioService {
     let usuario = new Usuario()
     usuario.email = data.email
     usuario.nome = data.nome
-    usuario.password = data.senha
+    usuario.password = bcrypt.hashSync(data.senha, 8)
     usuario.telefone = data.telefone
     usuario.cpf = data.cpf
     return this.usuarioRepository.save(usuario)
