@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ResultadoDto } from 'src/dto/resultado.dto';
 import { UsuarioCadastrarDto } from './dto/usuario.cadastrar.dto';
 import { Usuario } from './usuario.entity';
@@ -16,5 +17,11 @@ export class UsuarioController {
   @Post('cadastrar')
   async cadastrar(@Body() data: UsuarioCadastrarDto): Promise<ResultadoDto>{    
     return this.usuarioService.cadastrar(data)    
+  }
+
+  @UseGuards(AuthGuard('local'))
+  @Post('login')
+  async login(@Request() req) {
+    return req.user;
   }
 }

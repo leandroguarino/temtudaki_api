@@ -36,5 +36,9 @@ export class UsuarioService {
         mensagem: "Houve um errro ao cadastrar o usuário"
       }
     })    
-  } 
+  }
+  
+  async findOne(email: string): Promise<Usuario | undefined> {
+    return this.usuarioRepository.findOne({email: email});
+  }
 }
