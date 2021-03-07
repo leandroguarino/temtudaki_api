@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsuarioService } from 'src/usuario/usuario.service';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { TokenService } from 'src/token/token.service';
+import { Usuario } from 'src/usuario/usuario.entity';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +29,17 @@ export class AuthService {
       return {
         access_token: token
       };
+    }
+
+    async loginToken(token: string) {
+      let usuario: Usuario = await this.tokenService.getUsuarioByToken(token)
+      if (usuario){
+        return this.login(usuario)
+      }else{
+        return new HttpException({
+          errorMessage: 'Token inválido'
+        }, HttpStatus.UNAUTHORIZED)
+      }
     }
 
 }
